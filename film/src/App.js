@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Header } from './components';
 import Films from './features/films';
 import apiMovie, { apiMovieMap } from './conf/api.movie';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import Favoris from './features/favoris';
 
 class App extends Component {
 
@@ -10,7 +12,8 @@ class App extends Component {
     this.state = {
       movies: null,
       selectedMovie: 0,
-      loaded: false
+      loaded: false,
+      favoris: []
     }
 
   }
@@ -38,18 +41,55 @@ class App extends Component {
     })
   }
 
+  addFavori = title => {
+    const film = {...this.state.movies.find( m => m.title === title )};
+    this.setState(state => ({
+      favoris: [...this.state.favoris, film]
+    }));
+    }
+
+  removeFavori = title => {
+    const index = this.state.favoris.findIndex( f => f.title === title );
+    this.setState(state => ({
+      favoris: state.favoris.filter((_, i) => i !== index)
+      }));
+    }
+
   render() {
     return (
+      <Router>
       <div className="App d-flex flex-column">
         <Header />
-        <Films
-          loaded = { this.state.loaded }
-          updateMovies = { this.updateMovies }
-          updateSelectedMovie = { this.updateSelectedMovie }
-          movies = { this.state.movies }
-          selectedMovie = { this.state.selectedMovie }
+        <Switch>
+          <Route path="/films" render={ (props) => {
+            return (
+              <Films 
+                {...props}
+                loaded = { this.state.loaded }
+                updateMovies = { this.updateMovies }
+                updateSelectedMovie = { this.updateSelectedMovie }
+                movies = { this.state.movies }
+                selectedMovie = { this.state.selectedMovie }
+                removeFavori={ this.removeFavori }
+                addFavori={ this.addFavori }
+                favoris={ this.state.favoris.map( f => f.title ) }
+              
+              />
+            )
+          }} />
+          <Route path="/favoris" render={ (props) => {
+          return (
+            <Favoris
+              {...props}
+              favoris={this.state.favoris}
+              removeFavori={this.removeFavori}
           />
+        )
+      }} />
+          <Redirect to ="/films" />
+        </Switch>
       </div>
+      </Router>
     );
   }
 }
