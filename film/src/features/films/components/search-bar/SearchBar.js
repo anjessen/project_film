@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Formik} from 'formik';
-import apiMovie, { apiMovieMap }  from '../../../../conf/api.movie';
+import apiMovie  from '../../../../conf/api.movie';
 
 export default class SearchBar extends Component {
 
@@ -13,7 +13,7 @@ export default class SearchBar extends Component {
             .then( response => response.data.results)
             .then( moviesApi => {
                 const movies = moviesApi.map(m => ({
-                    img: 'https://images.tmdb.org/t/p/w500'+m.poster_path,
+                    img: 'https://images.tmdb.org/t/p/w500'+ m.poster_path,
                     title: m.title,
                     details: m.release_date + ' | ' + m.vote_average + '/10 (' + m.vote_count + ')',
                     description: m.overview

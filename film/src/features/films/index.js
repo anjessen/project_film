@@ -2,7 +2,7 @@ import React from 'react';
 import { MovieList, MovieDetails, SearchBar } from './components';
 import Loading from '../../components/utils/Loading';
 
-export default (props) => {
+const Film =  (props) => {
     return (
       <>
         <SearchBar updateMovies={props.updateMovies} />
@@ -11,7 +11,7 @@ export default (props) => {
             <MovieList
               movies={props.movies}
               updateSelectedMovie={props.updateSelectedMovie} 
-              favoris={ props.favoris }
+              favoris={ props.favoris.map( f => f.title ) }
               removeFavori={ props.removeFavori }
               addFavori={ props.addFavori } 
             />
@@ -23,3 +23,5 @@ export default (props) => {
     </>
   )
 }
+
+export default Film;
